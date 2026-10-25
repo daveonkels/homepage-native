@@ -1,5 +1,5 @@
-/* Homepage Native 0.1.0 — dependency-free Lovelace launcher. */
-const VERSION = "0.1.0";
+/* Homepage Native 0.1.1 — dependency-free Lovelace launcher. */
+const VERSION = "0.1.1";
 
 export function safeUrl(value) {
   try {
@@ -59,6 +59,14 @@ a:hover ha-card { border-color:var(--primary-color,#03a9f4); background:var(--se
 @media(max-width:500px) { .grid { grid-template-columns:1fr !important; } h1 { font-size:22px; } .tile { min-height:78px; padding:14px; } }
 @media(prefers-reduced-motion:reduce) { * { transition:none !important; } }
 `;
+
+// HA's app bundle replaces customElements and HTMLElement with its scoped
+// registry polyfill. Extra modules can execute before that happens. Wait for
+// an HA-owned element before defining classes, and re-read the current registry
+// each time: whenDefined() on the original registry can wait forever.
+while (!customElements.get("home-assistant")) {
+  await new Promise(resolve => setTimeout(resolve, 25));
+}
 
 export class HomepageNativeCard extends HTMLElement {
   constructor() {

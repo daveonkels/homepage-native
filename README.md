@@ -128,7 +128,7 @@ After installing and configuring the integration, reload your browser or reopen 
 If you still see “Custom element doesn't exist: homepage-native-card”, enable **Advanced mode** in your HA profile if necessary, then add a resource under **Settings → Dashboards → ⋮ → Resources** (also available from the dashboard edit menu). Choose **JavaScript Module** and use:
 
 ```text
-/homepage_native/homepage-native.js?v=0.1.0
+/homepage_native/homepage-native.js?v=0.1.1
 ```
 
 Reload the browser again. A missing-catalog message instead means the card loaded but its `entity` does not match an available Homepage Native sensor; check the entity ID and integration connection.

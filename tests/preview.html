@@ -2,7 +2,9 @@
 <style>body{font:15px system-ui;margin:0;padding:32px;background:#10151e;color:#e4e9f2;--primary-text-color:#e4e9f2;--secondary-text-color:#98a6bb;--card-background-color:#19212e;--secondary-background-color:#202b3b;--divider-color:#2b3545;--primary-color:#66b6f8;--ha-card-border-radius:16px}main{max-width:1080px;margin:auto}ha-card{display:block}ha-icon{display:inline-block;width:24px;height:24px}.preview{font-size:11px;color:#98a6bb;letter-spacing:2px;margin-bottom:24px}</style>
 <main><div class="preview">HOMEPAGE NATIVE · SAMPLE CATALOG</div><homepage-native-card></homepage-native-card></main>
 <script type="module">
-import '../custom_components/homepage_native/frontend/homepage-native.js';
+// Standalone preview emulates HA's initialized frontend.
+customElements.define('home-assistant', class extends HTMLElement {});
+await import('../custom_components/homepage_native/frontend/homepage-native.js');
 // Preview-only line icons; Home Assistant provides the real ha-icon implementation.
 const paths = {
   'mdi:magnify': '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',

@@ -1,8 +1,10 @@
 {
   "name": "homepage-native",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.19.0",
-  "scripts": {"test": "node --test tests/card.test.mjs"}
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  }
 }
