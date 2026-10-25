@@ -170,7 +170,7 @@ export class HomepageNativeCard extends HTMLElement {
 class HomepageNativeEditor extends HTMLElement {
   constructor() { super(); this.attachShadow({mode:"open"}); }
   setConfig(config) { this._config = config; this._render(); }
-  set hass(hass) { this._hass = hass; this._render(); }
+  set hass(hass) { const first = !this._hass; this._hass = hass; if (first) this._render(); }
   _render() {
     if (!this._config || !this._hass) return;
     this.shadowRoot.replaceChildren(element("style", "", `label{display:block;margin:16px 0;font:inherit}input,select{display:block;width:100%;box-sizing:border-box;padding:12px;margin-top:6px;background:var(--card-background-color);color:var(--primary-text-color);border:1px solid var(--divider-color);border-radius:8px}input[type=checkbox]{display:inline;width:auto;margin-right:8px}`));
