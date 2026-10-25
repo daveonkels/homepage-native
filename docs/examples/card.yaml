@@ -1,0 +1,5 @@
+type: custom:homepage-native-card
+entity: sensor.homepage_catalog
+title: Apps & services
+show_search: true
+show_description: true

@@ -4,6 +4,16 @@ Your [Homepage](https://gethomepage.dev) apps and services, rendered as native H
 
 This custom integration includes its own Lovelace card. It does not embed Homepage, launch an iframe, or fetch widget metrics. Inspired by the catalog-based approach of the [Raycast Homepage extension](https://github.com/raycast/extensions/tree/main/extensions/homepage).
 
+## Screenshots
+
+![Homepage Native showing nine sample services in Media, Productivity, and Utilities groups](https://raw.githubusercontent.com/daveonkels/homepage-native/main/docs/screenshots/catalog.jpg)
+
+*Sample catalog rendered by the bundled card in the standalone preview. Colors follow the selected Home Assistant theme when installed; preview icons are stand-ins for HA icons.*
+
+![Searching for documents narrows the sample catalog to one matching service](https://raw.githubusercontent.com/daveonkels/homepage-native/main/docs/screenshots/search.jpg)
+
+*Search matches service names, descriptions, and group names. Screenshots use fictional services and example.com links.*
+
 ## Features
 
 - Imports `/api/services` on setup and every five minutes.
@@ -36,34 +46,92 @@ If HA cannot reach the public Homepage URL, supply the optional **Internal API U
 
 Use an internal address only on a trusted network. TLS verification stays enabled. API redirects and authentication challenges are rejected; this release does not store passwords or support Homepage's built-in authenticated API. An internal URL can work when authentication is provided by an external reverse proxy, but it does not bypass Homepage's own authentication. Do not disable public authentication to make the integration work.
 
-### Card YAML
+## Dashboard examples
 
-Use the actual catalog entity ID shown in your integration:
+Replace `sensor.homepage_catalog` in every example with your actual catalog entity ID. Find it under **Settings → Devices & services → Homepage Native → your device → Catalog**; open the entity settings to see its ID. Names can vary between installations and when you add multiple Homepage instances.
+
+### Add a card to an existing dashboard
+
+Edit your dashboard, choose **Add card → Manual**, and paste the following. You can also choose **Homepage Native** in the card picker and select the sensor using the visual editor.
 
 ```yaml
 type: custom:homepage-native-card
-entity: sensor.homepage_example_com_catalog
+entity: sensor.homepage_catalog
 title: Apps & services
 show_search: true
 show_description: true
 ```
 
-Optional filters and layout:
+This is a **card configuration**, so paste it into a card editor, not the dashboard's raw configuration editor.
+
+### Full-width Apps dashboard
+
+1. Open **Settings → Dashboards → Add dashboard → New dashboard from scratch**.
+2. Name it **Apps**, use `mdi:apps` as its icon, and choose a URL such as `homepage-apps`. Enable **Add to sidebar** if desired.
+3. Open the new dashboard, select **Edit dashboard → ⋮ → Raw configuration editor**, and replace the empty dashboard configuration with the YAML below.
+4. Save and exit editing.
 
 ```yaml
+views:
+  - title: Apps
+    path: apps
+    icon: mdi:apps
+    type: panel
+    cards:
+      - type: custom:homepage-native-card
+        entity: sensor.homepage_catalog
+        title: Apps & services
+        show_search: true
+        show_description: true
+```
+
+This is a **complete dashboard configuration**. Use it for a new dashboard; replacing an existing dashboard's raw configuration removes its current views and cards. A Panel view gives this single card the available width. Leave `columns` unset so tiles adapt to the available space.
+
+### Show selected groups alongside other cards
+
+Add this as a Manual card on an existing dashboard, including a Sections dashboard:
+
+```yaml
+type: custom:homepage-native-card
+entity: sensor.homepage_catalog
+title: Media & utilities
+show_search: true
+show_description: false
 groups:
   - Media
   - Utilities
-columns: 3
+columns: 2
 ```
 
-Omit `columns` for responsive automatic sizing. Values 1–6 are supported, with a single column on small screens. Use a Panel view for a full-width launcher, or add the card to a Sections dashboard alongside other HA cards. Groups absent from Homepage are hidden; an empty filter list shows all groups.
+Group names must match Homepage exactly, including capitalization. Nested groups use the flattened name shown on the catalog card. Unknown groups are hidden; omitting `groups` or setting `groups: []` shows every group. Filtering preserves Homepage's group order rather than reordering it to match the filter list.
 
-If the custom card is not found after a browser refresh, add this JavaScript module under **Settings → Dashboards → Resources**:
+Download the same examples: [single card](https://github.com/daveonkels/homepage-native/blob/main/docs/examples/card.yaml), [complete Apps dashboard](https://github.com/daveonkels/homepage-native/blob/main/docs/examples/dashboard.yaml), and [filtered card](https://github.com/daveonkels/homepage-native/blob/main/docs/examples/filtered-card.yaml).
 
-```
+### Card options
+
+| Option | Default | Purpose |
+| --- | --- | --- |
+| `type` | Required | Always `custom:homepage-native-card`. |
+| `entity` | Required | Your Homepage Native catalog sensor. |
+| `title` | `Apps & services` | Heading above the catalog. |
+| `show_search` | `true` | Show the search field. |
+| `show_description` | `true` | Show each service's description. |
+| `groups` | All groups | List of exact Homepage group names to include. |
+| `columns` | Automatic | Fixed column count, integer 1–6. Small screens use one column. |
+
+The visual editor supports sensor, title, search, and descriptions. Set group filters and columns in the card's code editor. These options affect this card only; they do not change Homepage or other cards using the same sensor.
+
+### If the card does not appear
+
+After installing and configuring the integration, reload your browser or reopen the HA app. The card is bundled with the integration and normally registers automatically.
+
+If you still see “Custom element doesn't exist: homepage-native-card”, enable **Advanced mode** in your HA profile if necessary, then add a resource under **Settings → Dashboards → ⋮ → Resources** (also available from the dashboard edit menu). Choose **JavaScript Module** and use:
+
+```text
 /homepage_native/homepage-native.js?v=0.1.0
 ```
+
+Reload the browser again. A missing-catalog message instead means the card loaded but its `entity` does not match an available Homepage Native sensor; check the entity ID and integration connection.
 
 ## Refresh and failure behavior
 
@@ -89,6 +157,6 @@ python3 -m http.server 8765 --bind 127.0.0.1
 # Open http://127.0.0.1:8765/tests/preview.html for a synthetic catalog preview.
 ```
 
-The preview uses placeholder HA icons outside HA; installed cards use real `ha-icon` elements. CI also runs HACS validation and Home Assistant hassfest. If dependencies are ever added, use the exact pnpm version in `packageManager` and the workstation's `sfw pnpm` policy.
+The preview uses lightweight SVG stand-ins for HA icons and fictional services; installed cards use real `ha-icon` elements. It is also the source for the README screenshots in `docs/screenshots/`. CI also runs HACS validation and Home Assistant hassfest. If dependencies are ever added, use the exact pnpm version in `packageManager` and the workstation's `sfw pnpm` policy.
 
 MIT licensed.

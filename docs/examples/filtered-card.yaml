@@ -1,0 +1,9 @@
+type: custom:homepage-native-card
+entity: sensor.homepage_catalog
+title: Media & utilities
+show_search: true
+show_description: false
+groups:
+  - Media
+  - Utilities
+columns: 2

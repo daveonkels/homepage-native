@@ -1,9 +1,27 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Homepage Native · preview</title>
-<style>body{font:15px system-ui;margin:0;padding:32px;background:#10151e;color:#e4e9f2;--primary-text-color:#e4e9f2;--secondary-text-color:#98a6bb;--card-background-color:#19212e;--secondary-background-color:#202b3b;--divider-color:#2b3545;--primary-color:#66b6f8;--ha-card-border-radius:16px}main{max-width:1080px;margin:auto}ha-card{display:block}ha-icon{display:inline-block;width:24px;height:24px}ha-icon::before{content:'◈';font-size:23px;color:var(--primary-color)}.preview{font-size:11px;color:#98a6bb;letter-spacing:2px;margin-bottom:24px}</style>
-<main><div class="preview">HOMEPAGE NATIVE · DEVELOPMENT PREVIEW</div><homepage-native-card></homepage-native-card></main>
+<style>body{font:15px system-ui;margin:0;padding:32px;background:#10151e;color:#e4e9f2;--primary-text-color:#e4e9f2;--secondary-text-color:#98a6bb;--card-background-color:#19212e;--secondary-background-color:#202b3b;--divider-color:#2b3545;--primary-color:#66b6f8;--ha-card-border-radius:16px}main{max-width:1080px;margin:auto}ha-card{display:block}ha-icon{display:inline-block;width:24px;height:24px}.preview{font-size:11px;color:#98a6bb;letter-spacing:2px;margin-bottom:24px}</style>
+<main><div class="preview">HOMEPAGE NATIVE · SAMPLE CATALOG</div><homepage-native-card></homepage-native-card></main>
 <script type="module">
 import '../custom_components/homepage_native/frontend/homepage-native.js';
-customElements.define('ha-icon',class extends HTMLElement { connectedCallback(){this.textContent='◈';this.style.cssText='display:inline-block;font-size:24px;color:var(--primary-color)';} });
+// Preview-only line icons; Home Assistant provides the real ha-icon implementation.
+const paths = {
+  'mdi:magnify': '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',
+  'mdi:open-in-new': '<path d="M14 3h7v7m0-7L10 14M10 4H4v16h16v-6"/>',
+  'mdi:movie-open': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 4l3 5m4-5 3 5m-7 3 5 3-5 3z"/>',
+  'mdi:music': '<path d="M9 17V5l11-2v12M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/>',
+  'mdi:book-open': '<path d="M12 5v16M3 3l9 2 9-2v16l-9 2-9-2z"/>',
+  'mdi:file-document': '<path d="M5 2h9l5 5v15H5zM14 2v6h5M8 12h8M8 16h8"/>',
+  'mdi:notebook': '<rect x="5" y="3" width="15" height="18" rx="2"/><path d="M3 7h4M3 12h4M3 17h4M10 8h6M10 12h6"/>',
+  'mdi:bookmark': '<path d="M6 3h12v19l-6-5-6 5z"/>',
+  'mdi:lan': '<rect x="8" y="2" width="8" height="6" rx="1"/><path d="M12 8v5M5 17v-4h14v4"/><rect x="2" y="17" width="6" height="5"/><rect x="16" y="17" width="6" height="5"/>',
+  'mdi:harddisk': '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="10" r="4"/><path d="m12 10 5 8M6 18h2"/>',
+  'mdi:heart-pulse': '<path d="M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 5 2 11 8 16 6-5 12-11 8-16zM2 12h5l2-4 4 8 2-4h7"/>',
+};
+customElements.define('ha-icon',class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode:'open'}).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;width:var(--mdc-icon-size,24px);height:var(--mdc-icon-size,24px)">${paths[this.getAttribute('icon')] || paths['mdi:bookmark']}</svg>`;
+  }
+});
 const services=(items)=>items.map(([name,description,icon])=>({name,description,icon,url:'https://example.com/'}));
 const groups=[
 {name:'Media',services:services([['Movies','Your movie library','mdi:movie-open'],['Music','Albums, playlists, and discoveries','mdi:music'],['Audiobooks','Pick up where you left off','mdi:book-open']])},
