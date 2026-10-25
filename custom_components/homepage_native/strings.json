@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {"user": {
+      "title": "Connect to Homepage",
+      "description": "Import your Homepage app links as native Home Assistant cards. No widget metrics are fetched. If HA needs a LAN address, set the optional internal API URL; the Homepage URL is still used for app links and the allowed Host header.",
+      "data": {"url": "Homepage URL", "api_url": "Internal API URL (optional)"},
+      "data_description": {"url": "Example: https://homepage.example.com", "api_url": "Example: http://192.168.1.20:3000. Leave blank if HA can reach the Homepage URL."}
+    }},
+    "error": {
+      "invalid_url": "Enter an HTTP(S) base URL without credentials, query parameters, or fragments.",
+      "cannot_connect": "Cannot reach Homepage. Check the address, network access, and allowed hosts.",
+      "auth_required": "Homepage requires authentication or redirects. Use an internal API URL accessible to HA; do not remove public authentication.",
+      "invalid_catalog": "This address did not return a valid Homepage service catalog at /api/services."
+    },
+    "abort": {"already_configured": "This Homepage instance is already configured."}
+  },
+  "options": {"step": {"init": {
+    "title": "Catalog refresh",
+    "description": "How often to check for added, renamed, or removed Homepage services.",
+    "data": {"refresh_interval": "Refresh interval (seconds)"}
+  }}}
+}

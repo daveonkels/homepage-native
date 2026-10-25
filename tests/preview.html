@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Homepage Native · preview</title>
+<style>body{font:15px system-ui;margin:0;padding:32px;background:#10151e;color:#e4e9f2;--primary-text-color:#e4e9f2;--secondary-text-color:#98a6bb;--card-background-color:#19212e;--secondary-background-color:#202b3b;--divider-color:#2b3545;--primary-color:#66b6f8;--ha-card-border-radius:16px}main{max-width:1080px;margin:auto}ha-card{display:block}ha-icon{display:inline-block;width:24px;height:24px}ha-icon::before{content:'◈';font-size:23px;color:var(--primary-color)}.preview{font-size:11px;color:#98a6bb;letter-spacing:2px;margin-bottom:24px}</style>
+<main><div class="preview">HOMEPAGE NATIVE · DEVELOPMENT PREVIEW</div><homepage-native-card></homepage-native-card></main>
+<script type="module">
+import '../custom_components/homepage_native/frontend/homepage-native.js';
+customElements.define('ha-icon',class extends HTMLElement { connectedCallback(){this.textContent='◈';this.style.cssText='display:inline-block;font-size:24px;color:var(--primary-color)';} });
+const services=(items)=>items.map(([name,description,icon])=>({name,description,icon,url:'https://example.com/'}));
+const groups=[
+{name:'Media',services:services([['Movies','Your movie library','mdi:movie-open'],['Music','Albums, playlists, and discoveries','mdi:music'],['Audiobooks','Pick up where you left off','mdi:book-open']])},
+{name:'Productivity',services:services([['Documents','Search and organize your archive','mdi:file-document'],['Notes','A place for ideas','mdi:notebook'],['Bookmarks','Your saved corner of the web','mdi:bookmark']])},
+{name:'Utilities',services:services([['Network','Manage your connected devices','mdi:lan'],['Storage','Files, backups, and capacity','mdi:harddisk'],['Monitoring','Service availability','mdi:heart-pulse']])}];
+const card=document.querySelector('homepage-native-card');
+card.setConfig({entity:'sensor.homepage_catalog',title:'Apps & services'});
+card.hass={states:{'sensor.homepage_catalog':{state:'9',attributes:{groups,homepage_url:'https://example.com'}}},callService:async()=>{}};
+</script></html>
